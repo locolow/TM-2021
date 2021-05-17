@@ -34,7 +34,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
-
+	public GlobalStateManager globalManager;
     //Player parameters
     [Range (1, 2)] //Enables a nifty slider in the editor
     public int playerNumber = 1;
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
     //Can the player drop bombs?
     public bool canMove = true;
     //Can the player move?
-
+	public bool dead = false;
     private int bombs = 2;
     //Amount of bombs the player has left to drop, gets decreased as the player
     //drops a bomb, increases as an owned bomb explodes
@@ -177,15 +177,22 @@ public class Player : MonoBehaviour
     {
         if (bombPrefab)
         { //Check if bomb prefab is assigned first
-
-        }
-    }
+			Instantiate(bombPrefab, new Vector3(Mathf.RoundToInt(myTransform.position.x), 
+			bombPrefab.transform.position.y, Mathf.RoundToInt(myTransform.position.z)),
+			bombPrefab.transform.rotation);
+		}
+		
+	}
 
     public void OnTriggerEnter (Collider other)
     {
         if (other.CompareTag ("Explosion"))
         {
             Debug.Log ("P" + playerNumber + " hit by explosion!");
+			dead = true; // 1
+			globalManager.PlayerDied(playerNumber); // 2
+			Destroy(gameObject); // 3  
+
         }
     }
 }
