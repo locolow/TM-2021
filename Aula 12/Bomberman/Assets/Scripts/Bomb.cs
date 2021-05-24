@@ -21,6 +21,7 @@ public class Bomb : MonoBehaviour
          
 
     }
+	
 	void Explode() 
 		{
 			Instantiate(explosionPrefab, transform.position, Quaternion.identity); //1
